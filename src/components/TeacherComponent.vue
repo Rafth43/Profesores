@@ -25,8 +25,8 @@ import { ref, Ref } from 'vue';
         profesor.value.materias.push(materia.value);
         materia.value = "";
     }
-    const sustractMateria = () => {
-        profesor.value.materias.pop();
+    const sustractMateria = (a) => {
+        profesor.value.materias.splice(a, 1);
     }
 
 
@@ -57,7 +57,7 @@ import { ref, Ref } from 'vue';
                 
             </div>
             <div class="materias">
-                <div class="listado" v-for="(item, index) in profesor.materias" :key="index"><a class="btn_d" @click="sustractMateria">x</a><span>{{ item }}</span></div>
+                <div class="listado" v-for="(item, index) in profesor.materias" :key="index"><a class="btn_d" @click="sustractMateria(index)">x</a><span>{{ item }}</span></div>
             </div>
             <div class="card_i">
                 <span for="" class="mensaje">Esta deacuerdo con la información suministrada</span>
