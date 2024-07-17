@@ -6,7 +6,8 @@ import { ref, Ref } from 'vue';
         Apellidos: string,
         Cedula: string,
         materias: Array<string>,
-        documentacion: boolean
+        documentacion: boolean,
+        index: string,
     }
 
     let profesor:Ref<IProfesor> = ref({
@@ -15,6 +16,7 @@ import { ref, Ref } from 'vue';
         Cedula: '',
         materias: [],
         documentacion: false,
+        index: '',
     })
 
     let profesores:Ref<Array<IProfesor>> = ref([]);
@@ -25,11 +27,54 @@ import { ref, Ref } from 'vue';
         profesor.value.materias.push(materia.value);
         materia.value = "";
     }
-    const sustractMateria = (a) => {
+    const sustractMateria = (a:number) => {
         profesor.value.materias.splice(a, 1);
     }
 
+    const editarProfesores = (items, index:number) => {
+        profesores.value[index].Nombres = items.value.Nombres
+        profesores.value[index].Apellidos = items.value.Apellidos
+        profesores.value[index].Cedula = items.value.Cedula
+        profesores.value[index].materias = items.value.materias
+        profesores.value[index].documentacion = items.value.documentacion
 
+        profesor.value.Nombres = "",
+        profesor.value.Apellidos = "",
+        profesor.value.Cedula = "",
+        profesor.value.materias = [],
+        profesor.value.documentacion = false
+        profesor.value.index = ""
+    }
+
+    const agregarProfesor = (index) => {
+        if(index !== ""){
+            editarProfesores(profesor, index)
+        }else{
+            profesores.value.push({
+                Nombres:profesor.value.Nombres,
+                Apellidos:profesor.value.Apellidos,
+                Cedula:profesor.value.Cedula,
+                materias:profesor.value.materias,
+                documentacion:profesor.value.documentacion,
+                index:profesor.value.index
+            });
+            profesor.value.Nombres = "",
+            profesor.value.Apellidos = "",
+            profesor.value.Cedula = "",
+            profesor.value.materias = [],
+            profesor.value.documentacion = false
+            profesor.value.index = ""
+        }
+    }
+
+    const editarProfesor = (items, index) => {
+        profesor.value.Nombres = items.Nombres
+        profesor.value.Apellidos = items.Apellidos
+        profesor.value.Cedula = items.Cedula
+        profesor.value.materias = items.materias
+        profesor.value.documentacion = items.documentacion
+        profesor.value.index = index
+    }
 </script>
 
 <template>
@@ -64,18 +109,33 @@ import { ref, Ref } from 'vue';
                 <input type="checkbox" v-model="profesor.documentacion">
             </div>
     
-            <button type="button" style="width: 90%;">Enviar</button>
+            <button  type="button" style="width: 90%; margin-bottom: 15px" @click="agregarProfesor(profesor.index)">Enviar-{{profesor.index}}</button>
         </div>
         <div class="card">
             <h1>Listado de profesores</h1>
-            <div style="display: flex;">
-                <div class="card_p">
-                    hola
-                </div>
-                <div class="card_p">
-                    hola
-                </div>
-            </div>
+            <table>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Cedula</th>
+                    <th>Materias</th>
+                    <th>Documentación</th>
+                    <th>Editar</th>
+                </tr>
+                <tr v-for="(items,index) in profesores" :key="index">
+                    <td>{{ items.Nombres }}</td>
+                    <td>{{ items.Apellidos }}</td>
+                    <td>{{ items.Cedula }}</td>
+                    <td>
+                        <ul>
+                            <li v-for="(item,index) in items.materias" :key="index">{{ item }}</li>
+                        </ul>
+                    </td>
+                    <td>{{ items.documentacion }}</td>
+                    <td><button @click="editarProfesor(items, index)">Editar</button></td>
+                </tr>
+                
+            </table>
         </div>
     </div>
 </template>
@@ -83,7 +143,7 @@ import { ref, Ref } from 'vue';
 <style scoped>
 .card {
     margin: auto;
-    width: 30%;
+    width: 35%;
     height: 50%;
     box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
     border-radius: 10px;
@@ -162,7 +222,7 @@ button{
     height: 35px;
     width: 70px;
     border-radius: 5px;
-    margin-bottom: 15px;
+    /* margin-bottom: 15px; */
     color: aliceblue;
     font-size: small;
     font-weight: 600;
@@ -179,6 +239,18 @@ button:hover{
     background-color:rgb(226, 234, 240) ;
     color: rgba(73, 151, 253, 0.479);
     
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+    justify-content: center
+}
+
+td, th{
+    width: 10%;
+    height: 20%;
+    border: 1px solid rgba(73, 151, 253, 0.479);
 }
 
 </style>
