@@ -27,6 +27,15 @@ import { ref, Ref } from 'vue';
         profesor.value.materias.push(materia.value);
         materia.value = "";
     }
+    const limpiarProfesor = () => {
+        profesor.value.Nombres = "",
+        profesor.value.Apellidos = "",
+        profesor.value.Cedula = "",
+        profesor.value.materias = [],
+        profesor.value.documentacion = false
+        profesor.value.index = ""
+    }
+
     const sustractMateria = (a:number) => {
         profesor.value.materias.splice(a, 1);
     }
@@ -37,18 +46,12 @@ import { ref, Ref } from 'vue';
         profesores.value[index].Cedula = items.value.Cedula
         profesores.value[index].materias = items.value.materias
         profesores.value[index].documentacion = items.value.documentacion
-
-        profesor.value.Nombres = "",
-        profesor.value.Apellidos = "",
-        profesor.value.Cedula = "",
-        profesor.value.materias = [],
-        profesor.value.documentacion = false
-        profesor.value.index = ""
     }
 
     const agregarProfesor = (index) => {
         if(index !== ""){
-            editarProfesores(profesor, index)
+            editarProfesores(profesor, index);
+            limpiarProfesor();
         }else{
             profesores.value.push({
                 Nombres:profesor.value.Nombres,
@@ -58,12 +61,7 @@ import { ref, Ref } from 'vue';
                 documentacion:profesor.value.documentacion,
                 index:profesor.value.index
             });
-            profesor.value.Nombres = "",
-            profesor.value.Apellidos = "",
-            profesor.value.Cedula = "",
-            profesor.value.materias = [],
-            profesor.value.documentacion = false
-            profesor.value.index = ""
+            limpiarProfesor();
         }
     }
 
